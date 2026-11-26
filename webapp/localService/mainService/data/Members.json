@@ -1,0 +1,82 @@
+[
+  {
+    "ID": "3e000000-0000-4000-8000-000000000001",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "priya.sharma@example.com",
+    "displayName": "Priya Sharma",
+    "role": "Member",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  },
+  {
+    "ID": "3e000000-0000-4000-8000-000000000002",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "jonas.weber@example.com",
+    "displayName": "Jonas Weber",
+    "role": "Manager",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  },
+  {
+    "ID": "3e000000-0000-4000-8000-000000000003",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "mei.lin@example.com",
+    "displayName": "Mei Lin",
+    "role": "Member",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  },
+  {
+    "ID": "3e000000-0000-4000-8000-000000000004",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "carlos.diaz@example.com",
+    "displayName": "Carlos Diaz",
+    "role": "Member",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  },
+  {
+    "ID": "3e000000-0000-4000-8000-000000000005",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "sara.okafor@example.com",
+    "displayName": "Sara Okafor",
+    "role": "Member",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  },
+  {
+    "ID": "3e000000-0000-4000-8000-000000000006",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "tom.becker@example.com",
+    "displayName": "Tom Becker",
+    "role": "Member",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  },
+  {
+    "ID": "3e000000-0000-4000-8000-000000000007",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "nina.rossi@example.com",
+    "displayName": "Nina Rossi",
+    "role": "Member",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  },
+  {
+    "ID": "3e000000-0000-4000-8000-000000000008",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "userId": "omar.haddad@example.com",
+    "displayName": "Omar Haddad",
+    "role": "Member",
+    "location": "HQ",
+    "annualAllowance": 25,
+    "active": true
+  }
+]

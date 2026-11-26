@@ -1,0 +1,23 @@
+[
+  {
+    "ID": "5e000000-0000-4000-8000-000000000001",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "name": "Backend",
+    "description": "Backend developers",
+    "minAvailable": 2
+  },
+  {
+    "ID": "5e000000-0000-4000-8000-000000000002",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "name": "Support rota",
+    "description": "First-level support coverage",
+    "minAvailable": 2
+  },
+  {
+    "ID": "5e000000-0000-4000-8000-000000000003",
+    "team_ID": "7e000000-0000-4000-8000-000000000001",
+    "name": "Release crew",
+    "description": "People who can run a release",
+    "minAvailable": 1
+  }
+]

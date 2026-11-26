@@ -1,23 +1,24 @@
 {
-  "name": "com.demo.fioriskeleton",
+  "name": "com.team.leavetracker",
   "version": "0.0.1",
   "private": true,
-  "description": "SAP Fiori skeleton application",
+  "description": "Team Leave Tracker - SAPUI5 freestyle Fiori app",
   "scripts": {
-    "start_old": "ui5 serve --open index.html",
-    "build_old": "ui5 build --clean-dest",
-    "start": "fiori run --open \"test/flpSandbox.html?sap-ui-xx-viewCache=false#app-tile\"",
-    "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flpSandbox.html?sap-ui-xx-viewCache=false#app-tile\"",
-    "start-noflp": "fiori run --open \"index.html?sap-ui-xx-viewCache=false\"",
-    "start-variants-management": "fiori run --open \"preview.html?sap-ui-xx-viewCache=false&fiori-tools-rta-mode=true&sap-ui-rta-skip-flex-validation=true#preview-app\"",
-    "build": "ui5 build -a --clean-dest --include-task=generateCachebusterInfo",
-    "deploy": "fiori verify",
-    "deploy-config": "fiori add deploy-config"
+    "start": "fiori run --config ./ui5-mock.yaml --open \"index.html?sap-ui-xx-viewCache=false\"",
+    "start-manager": "fiori run --config ./ui5-mock.yaml --open \"index.html?sap-ui-xx-viewCache=false&role=manager\"",
+    "start-flp": "fiori run --config ./ui5-mock.yaml --open \"test/flp.html?sap-ui-xx-viewCache=false#app-preview\"",
+    "start-local": "fiori run --config ./ui5-local.yaml --open \"index.html?sap-ui-xx-viewCache=false\"",
+    "lint": "eslint .",
+    "build": "ui5 build -a --clean-dest --include-task=generateCachebusterInfo"
   },
   "devDependencies": {
-    "@ui5/cli": "^4.0.0",
+    "@sap-ux/eslint-plugin-fiori-tools": "^10.18.5",
+    "@sap-ux/ui5-middleware-fe-mockserver": "^2.4.19",
     "@sap/ux-ui5-tooling": "1",
-    "rimraf": "6.0.1"
+    "@ui5/cli": "^4.0.0",
+    "eslint": "^10.15.0",
+    "rimraf": "6.0.1",
+    "typescript-eslint": "^8.74.0"
   },
   "sapuxLayer": "CUSTOMER_BASE",
   "keywords": [

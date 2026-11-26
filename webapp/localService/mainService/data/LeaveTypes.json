@@ -1,0 +1,34 @@
+[
+  {
+    "code": "VAC",
+    "name": "Vacation",
+    "descr": "Paid annual leave",
+    "color": "#2B7D2B",
+    "countsAgainstAllowance": true,
+    "isPublic": false
+  },
+  {
+    "code": "SICK",
+    "name": "Sick leave",
+    "descr": "Illness",
+    "color": "#BB0000",
+    "countsAgainstAllowance": false,
+    "isPublic": false
+  },
+  {
+    "code": "TRAIN",
+    "name": "Training",
+    "descr": "Courses, conferences",
+    "color": "#0070F2",
+    "countsAgainstAllowance": false,
+    "isPublic": true
+  },
+  {
+    "code": "PERS",
+    "name": "Personal",
+    "descr": "Personal or family matters",
+    "color": "#8E44AD",
+    "countsAgainstAllowance": true,
+    "isPublic": false
+  }
+]

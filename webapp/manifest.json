@@ -1,22 +1,45 @@
 {
-  "_version": "1.60.0",
+  "_version": "1.65.0",
   "sap.app": {
-    "id": "com.demo.fioriskeleton",
+    "id": "com.team.leavetracker",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
+    "i18n": {
+      "bundleName": "com.team.leavetracker.i18n.i18n",
+      "supportedLocales": [""],
+      "fallbackLocale": ""
+    },
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
     "applicationVersion": {
       "version": "0.0.1"
     },
-    "sourceTemplate": {
-      "id": "@sap/ux-app-migrator:freestyle",
-      "version": "1.34.2",
-      "toolsId": "aa4cfab0-8f4e-4c1e-a476-b23149fcf3be"
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/leave/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0",
+          "localUri": "localService/mainService/metadata.xml"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "leavetracker-display": {
+          "semanticObject": "LeaveTracker",
+          "action": "display",
+          "title": "{{appTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
     "technology": "UI5",
+    "icon": "sap-icon://general-leave-request",
     "deviceTypes": {
       "desktop": true,
       "tablet": true,
@@ -26,10 +49,13 @@
   "sap.ui5": {
     "flexEnabled": false,
     "dependencies": {
-      "minUI5Version": "1.120.0",
+      "minUI5Version": "1.148.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.tnt": {},
+        "sap.ui.layout": {}
       }
     },
     "contentDensities": {
@@ -40,7 +66,18 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "com.demo.fioriskeleton.i18n.i18n"
+          "bundleName": "com.team.leavetracker.i18n.i18n",
+          "supportedLocales": [""],
+          "fallbackLocale": ""
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
         }
       }
     },
@@ -52,32 +89,43 @@
       ]
     },
     "rootView": {
-      "viewName": "com.demo.fioriskeleton.view.App",
+      "viewName": "com.team.leavetracker.view.App",
       "type": "XML",
-      "id": "App"
+      "id": "App",
+      "async": true
     },
     "routing": {
       "config": {
         "routerClass": "sap.m.routing.Router",
         "type": "View",
         "viewType": "XML",
-        "path": "com.demo.fioriskeleton.view",
+        "path": "com.team.leavetracker.view",
         "controlId": "app",
         "controlAggregation": "pages",
-        "async": true
+        "async": true,
+        "bypassed": {
+          "target": "home"
+        }
       },
       "routes": [
-        {
-          "name": "RouteMain",
-          "pattern": "",
-          "target": "TargetMain"
-        }
+        { "name": "home", "pattern": "", "target": "home" },
+        { "name": "calendar", "pattern": "calendar", "target": "calendar" },
+        { "name": "availability", "pattern": "availability/:date:", "target": "availability" },
+        { "name": "myLeaves", "pattern": "myLeaves", "target": "myLeaves" },
+        { "name": "approvals", "pattern": "approvals", "target": "approvals" },
+        { "name": "team", "pattern": "team", "target": "team" },
+        { "name": "rules", "pattern": "rules", "target": "rules" },
+        { "name": "periods", "pattern": "periods", "target": "periods" }
       ],
       "targets": {
-        "TargetMain": {
-          "id": "Main",
-          "name": "Main"
-        }
+        "home": { "id": "home", "name": "Home", "level": 1 },
+        "calendar": { "id": "calendar", "name": "Placeholder", "level": 1 },
+        "availability": { "id": "availability", "name": "Placeholder", "level": 1 },
+        "myLeaves": { "id": "myLeaves", "name": "Placeholder", "level": 1 },
+        "approvals": { "id": "approvals", "name": "Placeholder", "level": 1 },
+        "team": { "id": "team", "name": "Placeholder", "level": 1 },
+        "rules": { "id": "rules", "name": "Placeholder", "level": 1 },
+        "periods": { "id": "periods", "name": "Placeholder", "level": 1 }
       }
     }
   }

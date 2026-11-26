@@ -1,6 +1,8 @@
+# Default config: UI5 from the CDN, OData requests go to a real backend.
+# There is no backend yet (CAP arrives in Phase 4). Use `npm start`, which runs ui5-mock.yaml.
 specVersion: "4.0"
 metadata:
-  name: com.demo.fioriskeleton
+  name: com.team.leavetracker
 type: application
 server:
   customMiddleware:
@@ -13,6 +15,11 @@ server:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
+          version: "1.148.13"
+        # Phase 4: proxy the CAP service, e.g.
+        # backend:
+        #   - path: /odata/v4/leave
+        #     url: http://localhost:4004
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -22,5 +29,5 @@ server:
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:
-        component: com.demo.fioriskeleton
-        ui5Theme: sap_horizon
+        flp:
+          theme: sap_horizon

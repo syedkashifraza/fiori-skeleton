@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Mock metadata for LeaveService (OData V4).
+
+  Shaped like the $metadata CAP generates for the CDS model in the design doc
+  (section 7): cuid keys (Edm.Guid "ID"), managed fields, foreign keys named
+  <association>_<key>. When the CAP service exists (Phase 4) this file can be
+  regenerated from the CDS model (cds compile, target edmx) and the UI keeps working.
+-->
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="LeaveService">
+
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="Teams" EntityType="LeaveService.Teams">
+          <NavigationPropertyBinding Path="members" Target="Members"/>
+          <NavigationPropertyBinding Path="subgroups" Target="Subgroups"/>
+          <NavigationPropertyBinding Path="rules" Target="Rules"/>
+          <NavigationPropertyBinding Path="criticalPeriods" Target="CriticalPeriods"/>
+        </EntitySet>
+        <EntitySet Name="Members" EntityType="LeaveService.Members">
+          <NavigationPropertyBinding Path="team" Target="Teams"/>
+          <NavigationPropertyBinding Path="subgroups" Target="SubgroupMembers"/>
+          <NavigationPropertyBinding Path="leaveRequests" Target="LeaveRequests"/>
+        </EntitySet>
+        <EntitySet Name="Subgroups" EntityType="LeaveService.Subgroups">
+          <NavigationPropertyBinding Path="team" Target="Teams"/>
+          <NavigationPropertyBinding Path="members" Target="SubgroupMembers"/>
+        </EntitySet>
+        <EntitySet Name="SubgroupMembers" EntityType="LeaveService.SubgroupMembers">
+          <NavigationPropertyBinding Path="subgroup" Target="Subgroups"/>
+          <NavigationPropertyBinding Path="member" Target="Members"/>
+        </EntitySet>
+        <EntitySet Name="LeaveTypes" EntityType="LeaveService.LeaveTypes"/>
+        <EntitySet Name="LeaveRequests" EntityType="LeaveService.LeaveRequests">
+          <NavigationPropertyBinding Path="member" Target="Members"/>
+          <NavigationPropertyBinding Path="type" Target="LeaveTypes"/>
+          <NavigationPropertyBinding Path="hits" Target="RuleHits"/>
+        </EntitySet>
+        <EntitySet Name="RuleHits" EntityType="LeaveService.RuleHits">
+          <NavigationPropertyBinding Path="request" Target="LeaveRequests"/>
+          <NavigationPropertyBinding Path="rule" Target="Rules"/>
+        </EntitySet>
+        <EntitySet Name="Rules" EntityType="LeaveService.Rules">
+          <NavigationPropertyBinding Path="team" Target="Teams"/>
+          <NavigationPropertyBinding Path="subgroup" Target="Subgroups"/>
+          <NavigationPropertyBinding Path="criticalPeriod" Target="CriticalPeriods"/>
+        </EntitySet>
+        <EntitySet Name="CriticalPeriods" EntityType="LeaveService.CriticalPeriods">
+          <NavigationPropertyBinding Path="team" Target="Teams"/>
+        </EntitySet>
+        <EntitySet Name="Holidays" EntityType="LeaveService.Holidays"/>
+        <FunctionImport Name="getAvailability" Function="LeaveService.getAvailability"/>
+      </EntityContainer>
+
+      <!-- ===== Entity types ===== -->
+
+      <EntityType Name="Teams">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="100"/>
+        <Property Name="countPendingInConcurrency" Type="Edm.Boolean" DefaultValue="true"/>
+        <Property Name="workWeek" Type="Edm.String" MaxLength="20"/>
+        <NavigationProperty Name="members" Type="Collection(LeaveService.Members)" Partner="team"/>
+        <NavigationProperty Name="subgroups" Type="Collection(LeaveService.Subgroups)" Partner="team"/>
+        <NavigationProperty Name="rules" Type="Collection(LeaveService.Rules)" Partner="team"/>
+        <NavigationProperty Name="criticalPeriods" Type="Collection(LeaveService.CriticalPeriods)" Partner="team"/>
+      </EntityType>
+
+      <EntityType Name="Members">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="team_ID" Type="Edm.Guid"/>
+        <Property Name="userId" Type="Edm.String" MaxLength="255"/>
+        <Property Name="displayName" Type="Edm.String" MaxLength="100"/>
+        <Property Name="role" Type="Edm.String"/>
+        <Property Name="location" Type="Edm.String" MaxLength="10"/>
+        <Property Name="annualAllowance" Type="Edm.Decimal" Precision="4" Scale="1"/>
+        <Property Name="active" Type="Edm.Boolean" DefaultValue="true"/>
+        <NavigationProperty Name="team" Type="LeaveService.Teams" Partner="members">
+          <ReferentialConstraint Property="team_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="subgroups" Type="Collection(LeaveService.SubgroupMembers)" Partner="member"/>
+        <NavigationProperty Name="leaveRequests" Type="Collection(LeaveService.LeaveRequests)" Partner="member"/>
+      </EntityType>
+
+      <EntityType Name="Subgroups">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="team_ID" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="60"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <Property Name="minAvailable" Type="Edm.Int32"/>
+        <NavigationProperty Name="team" Type="LeaveService.Teams" Partner="subgroups">
+          <ReferentialConstraint Property="team_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="members" Type="Collection(LeaveService.SubgroupMembers)" Partner="subgroup"/>
+      </EntityType>
+
+      <EntityType Name="SubgroupMembers">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="subgroup_ID" Type="Edm.Guid"/>
+        <Property Name="member_ID" Type="Edm.Guid"/>
+        <NavigationProperty Name="subgroup" Type="LeaveService.Subgroups" Partner="members">
+          <ReferentialConstraint Property="subgroup_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="member" Type="LeaveService.Members" Partner="subgroups">
+          <ReferentialConstraint Property="member_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+
+      <EntityType Name="LeaveTypes">
+        <Key><PropertyRef Name="code"/></Key>
+        <Property Name="code" Type="Edm.String" MaxLength="10" Nullable="false"/>
+        <Property Name="name" Type="Edm.String" MaxLength="255"/>
+        <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="color" Type="Edm.String" MaxLength="7"/>
+        <Property Name="countsAgainstAllowance" Type="Edm.Boolean"/>
+        <Property Name="isPublic" Type="Edm.Boolean"/>
+      </EntityType>
+
+      <EntityType Name="LeaveRequests">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="member_ID" Type="Edm.Guid"/>
+        <Property Name="type_code" Type="Edm.String" MaxLength="10"/>
+        <Property Name="startDate" Type="Edm.Date"/>
+        <Property Name="endDate" Type="Edm.Date"/>
+        <Property Name="startHalfDay" Type="Edm.Boolean" DefaultValue="false"/>
+        <Property Name="endHalfDay" Type="Edm.Boolean" DefaultValue="false"/>
+        <Property Name="workingDays" Type="Edm.Decimal" Precision="4" Scale="1"/>
+        <Property Name="status" Type="Edm.String"/>
+        <Property Name="comment" Type="Edm.String" MaxLength="500"/>
+        <Property Name="decidedBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="decidedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="decisionNote" Type="Edm.String" MaxLength="500"/>
+        <Property Name="overrideReason" Type="Edm.String" MaxLength="500"/>
+        <NavigationProperty Name="member" Type="LeaveService.Members" Partner="leaveRequests">
+          <ReferentialConstraint Property="member_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="type" Type="LeaveService.LeaveTypes">
+          <ReferentialConstraint Property="type_code" ReferencedProperty="code"/>
+        </NavigationProperty>
+        <NavigationProperty Name="hits" Type="Collection(LeaveService.RuleHits)" Partner="request"/>
+      </EntityType>
+
+      <EntityType Name="RuleHits">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="request_ID" Type="Edm.Guid"/>
+        <Property Name="rule_ID" Type="Edm.Guid"/>
+        <Property Name="effect" Type="Edm.String" MaxLength="20"/>
+        <Property Name="date" Type="Edm.Date"/>
+        <Property Name="message" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="request" Type="LeaveService.LeaveRequests" Partner="hits">
+          <ReferentialConstraint Property="request_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="rule" Type="LeaveService.Rules">
+          <ReferentialConstraint Property="rule_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+
+      <EntityType Name="Rules">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+        <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+        <Property Name="team_ID" Type="Edm.Guid"/>
+        <Property Name="subgroup_ID" Type="Edm.Guid"/>
+        <Property Name="ruleType" Type="Edm.String" MaxLength="30"/>
+        <Property Name="effect" Type="Edm.String"/>
+        <Property Name="threshold" Type="Edm.Int32"/>
+        <Property Name="period" Type="Edm.String" MaxLength="10"/>
+        <Property Name="criticalPeriod_ID" Type="Edm.Guid"/>
+        <Property Name="active" Type="Edm.Boolean" DefaultValue="true"/>
+        <Property Name="description" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="team" Type="LeaveService.Teams" Partner="rules">
+          <ReferentialConstraint Property="team_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="subgroup" Type="LeaveService.Subgroups">
+          <ReferentialConstraint Property="subgroup_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+        <NavigationProperty Name="criticalPeriod" Type="LeaveService.CriticalPeriods">
+          <ReferentialConstraint Property="criticalPeriod_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+
+      <EntityType Name="CriticalPeriods">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="team_ID" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="100"/>
+        <Property Name="startDate" Type="Edm.Date"/>
+        <Property Name="endDate" Type="Edm.Date"/>
+        <Property Name="reason" Type="Edm.String" MaxLength="255"/>
+        <NavigationProperty Name="team" Type="LeaveService.Teams" Partner="criticalPeriods">
+          <ReferentialConstraint Property="team_ID" ReferencedProperty="ID"/>
+        </NavigationProperty>
+      </EntityType>
+
+      <EntityType Name="Holidays">
+        <Key><PropertyRef Name="ID"/></Key>
+        <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="location" Type="Edm.String" MaxLength="10"/>
+        <Property Name="date" Type="Edm.Date"/>
+        <Property Name="name" Type="Edm.String" MaxLength="100"/>
+      </EntityType>
+
+      <!-- ===== Complex types for action / function results ===== -->
+
+      <ComplexType Name="ValidationHit">
+        <Property Name="rule_ID" Type="Edm.Guid"/>
+        <Property Name="ruleType" Type="Edm.String" MaxLength="30"/>
+        <Property Name="effect" Type="Edm.String" MaxLength="20"/>
+        <Property Name="date" Type="Edm.Date"/>
+        <Property Name="message" Type="Edm.String" MaxLength="255"/>
+      </ComplexType>
+
+      <ComplexType Name="MemberAvailability">
+        <Property Name="member_ID" Type="Edm.Guid"/>
+        <Property Name="displayName" Type="Edm.String" MaxLength="100"/>
+        <Property Name="halfDay" Type="Edm.Boolean"/>
+      </ComplexType>
+
+      <ComplexType Name="SubgroupCoverage">
+        <Property Name="subgroup_ID" Type="Edm.Guid"/>
+        <Property Name="name" Type="Edm.String" MaxLength="60"/>
+        <Property Name="available" Type="Edm.Decimal" Precision="4" Scale="1"/>
+        <Property Name="total" Type="Edm.Int32"/>
+        <Property Name="minAvailable" Type="Edm.Int32"/>
+        <Property Name="atRisk" Type="Edm.Boolean"/>
+      </ComplexType>
+
+      <ComplexType Name="DayAvailability">
+        <Property Name="date" Type="Edm.Date"/>
+        <Property Name="available" Type="Collection(LeaveService.MemberAvailability)"/>
+        <Property Name="absent" Type="Collection(LeaveService.MemberAvailability)"/>
+        <Property Name="coverage" Type="Collection(LeaveService.SubgroupCoverage)"/>
+        <Property Name="atRisk" Type="Edm.Boolean"/>
+      </ComplexType>
+
+      <!-- ===== Bound actions on LeaveRequests (implemented in Phase 2) ===== -->
+
+      <Action Name="validate" IsBound="true">
+        <Parameter Name="in" Type="LeaveService.LeaveRequests"/>
+        <ReturnType Type="Collection(LeaveService.ValidationHit)"/>
+      </Action>
+      <Action Name="submit" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="LeaveService.LeaveRequests"/>
+        <ReturnType Type="LeaveService.LeaveRequests"/>
+      </Action>
+      <Action Name="approve" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="LeaveService.LeaveRequests"/>
+        <Parameter Name="note" Type="Edm.String" MaxLength="500"/>
+        <ReturnType Type="LeaveService.LeaveRequests"/>
+      </Action>
+      <Action Name="reject" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="LeaveService.LeaveRequests"/>
+        <Parameter Name="note" Type="Edm.String" MaxLength="500"/>
+        <ReturnType Type="LeaveService.LeaveRequests"/>
+      </Action>
+      <Action Name="cancel" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="LeaveService.LeaveRequests"/>
+        <ReturnType Type="LeaveService.LeaveRequests"/>
+      </Action>
+      <Action Name="override" IsBound="true" EntitySetPath="in">
+        <Parameter Name="in" Type="LeaveService.LeaveRequests"/>
+        <Parameter Name="reason" Type="Edm.String" MaxLength="500"/>
+        <ReturnType Type="LeaveService.LeaveRequests"/>
+      </Action>
+
+      <!-- ===== Unbound function (implemented in Phase 1) ===== -->
+
+      <Function Name="getAvailability" IsBound="false" IsComposable="false">
+        <Parameter Name="team" Type="Edm.Guid"/>
+        <Parameter Name="from" Type="Edm.Date"/>
+        <Parameter Name="to" Type="Edm.Date"/>
+        <Parameter Name="subgroup" Type="Edm.Guid"/>
+        <ReturnType Type="Collection(LeaveService.DayAvailability)"/>
+      </Function>
+
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

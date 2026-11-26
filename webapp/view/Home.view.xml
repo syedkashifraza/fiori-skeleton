@@ -1,0 +1,96 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Home"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns="sap.m">
+  <Page id="homePage" title="{i18n>home.title}">
+    <content>
+      <VBox class="sapUiResponsiveMargin">
+        <Title text="{i18n>home.greeting} {user>/displayName}" level="H2" titleStyle="H3"/>
+        <MessageStrip
+          text="{i18n>home.mockNotice}"
+          type="Information"
+          showIcon="true"
+          visible="{user>/isMock}"
+          class="sapUiSmallMarginTop"/>
+
+        <HBox wrap="Wrap" class="sapUiSmallMarginTop">
+          <GenericTile id="outTodayTile" header="{i18n>home.tileOutToday}" subheader="{view>/todayText}"
+            class="sapUiTinyMarginEnd sapUiTinyMarginBottom" press=".onOpenAvailability">
+            <TileContent>
+              <NumericContent value="{view>/outTodayCount}" icon="sap-icon://offsite-work" withMargin="false"/>
+            </TileContent>
+          </GenericTile>
+          <GenericTile id="myUpcomingTile" header="{i18n>home.tileMyUpcoming}"
+            class="sapUiTinyMarginEnd sapUiTinyMarginBottom" press=".onOpenMyLeaves">
+            <TileContent>
+              <NumericContent value="{view>/myUpcomingCount}" icon="sap-icon://general-leave-request" withMargin="false"/>
+            </TileContent>
+          </GenericTile>
+          <GenericTile id="pendingTile" header="{i18n>home.tilePending}" visible="{user>/isManager}"
+            class="sapUiTinyMarginEnd sapUiTinyMarginBottom" press=".onOpenApprovals">
+            <TileContent>
+              <NumericContent value="{view>/pendingCount}" icon="sap-icon://approvals" valueColor="Critical" withMargin="false"/>
+            </TileContent>
+          </GenericTile>
+        </HBox>
+
+        <List
+          id="outTodayList"
+          headerText="{i18n>home.outTodayHeader}"
+          noDataText="{i18n>home.outTodayEmpty}"
+          class="sapUiSmallMarginTop"
+          items="{
+            path: '/LeaveRequests',
+            suspended: true,
+            parameters: { $count: true },
+            sorter: { path: 'member/displayName' },
+            events: { dataReceived: '.onOutTodayReceived' }
+          }">
+          <StandardListItem
+            title="{member/displayName}"
+            description="{
+              parts: ['type/name', {path: 'type/isPublic', targetType: 'any'}, 'user>/isManager'],
+              formatter: '.formatter.leaveTypeLabel'
+            }"
+            info="{
+              parts: [{path: 'startHalfDay', targetType: 'any'}, {path: 'endHalfDay', targetType: 'any'}],
+              formatter: '.formatter.halfDayInfo'
+            }"
+            icon="sap-icon://employee"/>
+        </List>
+
+        <List
+          id="myUpcomingList"
+          headerText="{i18n>home.myUpcomingHeader}"
+          noDataText="{i18n>home.myUpcomingEmpty}"
+          class="sapUiSmallMarginTop"
+          items="{
+            path: '/LeaveRequests',
+            suspended: true,
+            parameters: { $count: true },
+            sorter: { path: 'startDate' },
+            events: { dataReceived: '.onMyUpcomingReceived' }
+          }">
+          <ObjectListItem
+            title="{type/name}"
+            number="{workingDays}"
+            numberUnit="{i18n>leave.days}">
+            <firstStatus>
+              <ObjectStatus
+                text="{path: 'status', formatter: '.formatter.statusText'}"
+                state="{path: 'status', formatter: '.formatter.statusState'}"/>
+            </firstStatus>
+            <ObjectAttribute text="{
+              parts: [
+                {path: 'startDate', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'medium'}},
+                {path: 'endDate', type: 'sap.ui.model.odata.type.Date', formatOptions: {style: 'medium'}}
+              ],
+              formatter: '.formatDateRange'
+            }"/>
+          </ObjectListItem>
+        </List>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

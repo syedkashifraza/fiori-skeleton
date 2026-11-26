@@ -1,0 +1,8 @@
+[
+  {
+    "ID": "7e000000-0000-4000-8000-000000000001",
+    "name": "Platform Team",
+    "countPendingInConcurrency": true,
+    "workWeek": "MON-FRI"
+  }
+]

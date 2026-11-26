@@ -1,8 +1,5 @@
 node_modules/
 dist/
-
-node_modules/
-dist/
 .scp/
 .env
 Makefile*.mta
@@ -11,3 +8,4 @@ mta-*
 resources
 archive.zip
 .*_mta_build_tmp
+.DS_Store

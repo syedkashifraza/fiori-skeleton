@@ -1,26 +1,23 @@
+# Local config: UI5 libraries downloaded by the UI5 CLI (no CDN needed after the first run),
+# OData V4 served by the mock server.
 specVersion: "4.0"
 metadata:
-  name: com.demo.fioriskeleton
+  name: com.team.leavetracker
 type: application
 framework:
   name: SAPUI5
-  version: 1.120.0
+  version: "1.148.13"
   libraries:
     - name: sap.m
     - name: sap.ui.core
     - name: sap.f
-    - name: sap.ui.comp
-    - name: sap.ui.generic.app
-    - name: sap.ui.table
+    - name: sap.tnt
+    - name: sap.ui.layout
+    - name: sap.ui.unified
     - name: sap.ushell
-    - name: themelib_sap_bluecrystal
     - name: themelib_sap_horizon
 server:
   customMiddleware:
-    - name: fiori-tools-proxy
-      afterMiddleware: compression
-      configuration:
-        ignoreCertErrors: false
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -30,5 +27,15 @@ server:
     - name: fiori-tools-preview
       afterMiddleware: fiori-tools-appreload
       configuration:
-        component: com.demo.fioriskeleton
-        ui5Theme: sap_horizon
+        flp:
+          theme: sap_horizon
+    - name: sap-fe-mockserver
+      beforeMiddleware: csp
+      configuration:
+        mountPath: /
+        services:
+          - urlPath: /odata/v4/leave
+            metadataPath: ./webapp/localService/mainService/metadata.xml
+            mockdataPath: ./webapp/localService/mainService/data
+            generateMockData: false
+        annotations: []

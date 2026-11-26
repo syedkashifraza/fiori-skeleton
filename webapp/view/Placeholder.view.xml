@@ -1,0 +1,14 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Placeholder"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page title="{view>/title}">
+    <content>
+      <IllustratedMessage
+        illustrationType="sapIllus-Tent"
+        title="{view>/title}"
+        description="{view>/description}"
+        enableVerticalResponsiveness="true"/>
+    </content>
+  </Page>
+</mvc:View>

@@ -1,0 +1,34 @@
+[
+  {
+    "ID": "1f000000-0000-4000-8000-000000000001",
+    "request_ID": "1e000000-0000-4000-8000-000000000005",
+    "rule_ID": "8e000000-0000-4000-8000-000000000003",
+    "effect": "REQUIRE_APPROVAL",
+    "date": null,
+    "message": "13 working days is more than the 10 allowed without approval"
+  },
+  {
+    "ID": "1f000000-0000-4000-8000-000000000002",
+    "request_ID": "1e000000-0000-4000-8000-000000000006",
+    "rule_ID": "8e000000-0000-4000-8000-000000000004",
+    "effect": "REQUIRE_APPROVAL",
+    "date": "2027-01-19",
+    "message": "Release 2027.1 is a critical period"
+  },
+  {
+    "ID": "1f000000-0000-4000-8000-000000000003",
+    "request_ID": "1e000000-0000-4000-8000-000000000006",
+    "rule_ID": "8e000000-0000-4000-8000-000000000004",
+    "effect": "REQUIRE_APPROVAL",
+    "date": "2027-01-20",
+    "message": "Release 2027.1 is a critical period"
+  },
+  {
+    "ID": "1f000000-0000-4000-8000-000000000004",
+    "request_ID": "1e000000-0000-4000-8000-000000000006",
+    "rule_ID": "8e000000-0000-4000-8000-000000000004",
+    "effect": "REQUIRE_APPROVAL",
+    "date": "2027-01-21",
+    "message": "Release 2027.1 is a critical period"
+  }
+]

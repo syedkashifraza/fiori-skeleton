@@ -1,7 +1,55 @@
 <mvc:View
-  controllerName="com.demo.fioriskeleton.controller.App"
+  controllerName="com.team.leavetracker.controller.App"
   xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.f"
+  xmlns:tnt="sap.tnt"
   xmlns="sap.m"
   displayBlock="true">
-  <App id="app"/>
+  <tnt:ToolPage id="toolPage" sideExpanded="{= !${device>/system/phone} }">
+    <tnt:header>
+      <f:ShellBar
+        id="shellBar"
+        title="{i18n>appTitle}"
+        showMenuButton="true"
+        menuButtonPressed=".onToggleSideNav"
+        homeIcon="sap-icon://general-leave-request"
+        homeIconPressed=".onHomePress">
+        <f:additionalContent>
+          <!-- Mock phase only: switch test user. Replaced by XSUAA roles in Phase 3. -->
+          <Select
+            id="roleSelect"
+            visible="{user>/isMock}"
+            selectedKey="{user>/role}"
+            autoAdjustWidth="true"
+            change=".onRoleChange"
+            tooltip="{i18n>shell.roleSwitchTooltip}">
+            <core:Item key="member" text="{i18n>shell.roleMember}"/>
+            <core:Item key="manager" text="{i18n>shell.roleManager}"/>
+          </Select>
+        </f:additionalContent>
+        <f:profile>
+          <Avatar initials="{path: 'user>/displayName', formatter: '.initials'}" tooltip="{user>/displayName}"/>
+        </f:profile>
+      </f:ShellBar>
+    </tnt:header>
+    <tnt:sideContent>
+      <tnt:SideNavigation id="sideNav" itemSelect=".onNavItemSelect">
+        <tnt:NavigationList id="navList">
+          <tnt:NavigationListItem key="home" text="{i18n>nav.home}" icon="sap-icon://home"/>
+          <tnt:NavigationListItem key="calendar" text="{i18n>nav.calendar}" icon="sap-icon://calendar"/>
+          <tnt:NavigationListItem key="availability" text="{i18n>nav.availability}" icon="sap-icon://group"/>
+          <tnt:NavigationListItem key="myLeaves" text="{i18n>nav.myLeaves}" icon="sap-icon://general-leave-request"/>
+          <!-- Manager only. Hidden per item: a hidden NavigationListGroup breaks SideNavigation focus handling in 1.148. -->
+          <tnt:NavigationListItem key="approvals" visible="{user>/isManager}" text="{i18n>nav.approvals}" icon="sap-icon://approvals"/>
+          <tnt:NavigationListItem key="team" visible="{user>/isManager}" text="{i18n>nav.team}" icon="sap-icon://company-view"/>
+          <tnt:NavigationListItem key="rules" visible="{user>/isManager}" text="{i18n>nav.rules}" icon="sap-icon://request"/>
+          <tnt:NavigationListItem key="periods" visible="{user>/isManager}" text="{i18n>nav.periods}" icon="sap-icon://appointment"/>
+        </tnt:NavigationList>
+      </tnt:SideNavigation>
+    </tnt:sideContent>
+    <tnt:mainContents>
+      <App id="app"/>
+    </tnt:mainContents>
+  </tnt:ToolPage>
 </mvc:View>
