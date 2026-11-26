@@ -31,3 +31,8 @@ server:
       configuration:
         flp:
           theme: sap_horizon
+builder:
+  resources:
+    excludes:
+      # Mock server handlers run in Node.js during local development only
+      - "/localService/**/*.js"

@@ -1,0 +1,28 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.ui.layout.form">
+  <Dialog id="subgroupDialog" title="{sg>/title}" contentWidth="32rem" busy="{sg>/busy}">
+    <content>
+      <f:SimpleForm editable="true" layout="ColumnLayout" columnsM="1" columnsL="1" columnsXL="1">
+        <Label text="{i18n>team.name}" required="true"/>
+        <Input value="{sg>/name}" maxLength="60" valueState="{sg>/nameState}" valueLiveUpdate="true"/>
+        <Label text="{i18n>team.description}"/>
+        <Input value="{sg>/description}" maxLength="255"/>
+        <Label text="{i18n>team.members}"/>
+        <MultiComboBox selectedKeys="{sg>/memberIds}" items="{path: 'sg>/allMembers', templateShareable: false}" width="100%">
+          <core:Item key="{sg>ID}" text="{sg>displayName}"/>
+        </MultiComboBox>
+        <Label text="{i18n>team.minAvailable}"/>
+        <StepInput value="{sg>/minAvailable}" min="0" max="{= ${sg>/memberIds}.length }"/>
+      </f:SimpleForm>
+      <MessageStrip text="{i18n>team.minHint}" type="Information" showIcon="true" class="sapUiSmallMargin"/>
+    </content>
+    <beginButton>
+      <Button text="{i18n>common.save}" type="Emphasized" press=".onSaveSubgroup"/>
+    </beginButton>
+    <endButton>
+      <Button text="{i18n>common.cancel}" press=".onCloseSubgroupDialog"/>
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,20 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+  <Dialog id="decisionDialog" title="{dec>/title}" contentWidth="28rem" type="Message" state="{dec>/state}">
+    <content>
+      <VBox>
+        <Text text="{dec>/text}" class="sapUiSmallMarginBottom"/>
+        <Label text="{dec>/noteLabel}" required="{dec>/noteRequired}" labelFor="decisionNote"/>
+        <TextArea id="decisionNote" value="{dec>/note}" rows="3" width="100%" maxLength="500"
+          valueLiveUpdate="true" valueState="{dec>/noteState}" valueStateText="{i18n>approvals.reasonRequired}"/>
+      </VBox>
+    </content>
+    <beginButton>
+      <Button text="{dec>/confirmText}" type="{dec>/buttonType}" press=".onConfirmDecision"/>
+    </beginButton>
+    <endButton>
+      <Button text="{i18n>common.cancel}" press=".onCancelDecision"/>
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

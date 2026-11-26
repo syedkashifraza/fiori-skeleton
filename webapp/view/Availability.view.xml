@@ -1,0 +1,77 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Availability"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.f"
+  xmlns:card="sap.f.cards"
+  xmlns:l="sap.ui.layout"
+  xmlns="sap.m">
+  <Page id="availabilityPage" title="{i18n>availability.title}" busy="{av>/busy}">
+    <subHeader>
+      <OverflowToolbar>
+        <Button icon="sap-icon://navigation-left-arrow" tooltip="{i18n>availability.prevDay}" press=".onPrevDay"/>
+        <DatePicker id="datePicker" value="{av>/date}" valueFormat="yyyy-MM-dd" displayFormat="long"
+          width="14rem" change=".onDateChange"/>
+        <Button icon="sap-icon://navigation-right-arrow" tooltip="{i18n>availability.nextDay}" press=".onNextDay"/>
+        <Button text="{i18n>availability.today}" press=".onToday"/>
+        <ToolbarSpacer/>
+        <Text text="{av>/summary}"/>
+      </OverflowToolbar>
+    </subHeader>
+    <content>
+      <VBox class="sapUiSmallMargin">
+        <!-- 14-day risk strip -->
+        <Title text="{i18n>availability.next14}" titleStyle="H5"/>
+        <HBox items="{av>/strip}" wrap="Wrap" class="sapUiTinyMarginTop">
+          <GenericTag
+            text="{av>label}"
+            status="{av>state}"
+            design="{= ${av>state} === 'None' ? 'StatusIconHidden' : 'Full' }"
+            press=".onStripPress"
+            tooltip="{av>tooltip}"
+            class="sapUiTinyMarginEnd sapUiTinyMarginBottom">
+            <customData>
+              <core:CustomData key="date" value="{av>date}"/>
+            </customData>
+          </GenericTag>
+        </HBox>
+
+        <MessageStrip
+          text="{av>/nonWorkingText}"
+          visible="{= !${av>/working} }"
+          type="Information"
+          showIcon="true"
+          class="sapUiSmallMarginTop"/>
+
+        <!-- Subgroup coverage cards -->
+        <Title text="{i18n>availability.coverage}" titleStyle="H5" class="sapUiSmallMarginTop"/>
+        <HBox items="{av>/coverage}" wrap="Wrap" class="sapUiTinyMarginTop">
+          <f:Card width="17rem" class="sapUiTinyMarginEnd sapUiTinyMarginBottom">
+            <f:header>
+              <card:Header title="{av>name}" subtitle="{av>subtitle}" iconSrc="sap-icon://group"/>
+            </f:header>
+            <f:content>
+              <VBox class="sapUiSmallMargin">
+                <ObjectStatus text="{av>statusText}" state="{av>state}" icon="{av>icon}"/>
+                <ProgressIndicator percentValue="{av>percent}" displayValue="{av>ratio}" state="{av>state}"
+                  showValue="true" class="sapUiTinyMarginTop"/>
+              </VBox>
+            </f:content>
+          </f:Card>
+        </HBox>
+
+        <!-- Available / Out lists -->
+        <l:Grid defaultSpan="XL6 L6 M6 S12" class="sapUiSmallMarginTop" hSpacing="0">
+          <List headerText="{av>/availableHeader}" items="{av>/available}" noDataText="{i18n>availability.nobodyIn}">
+            <StandardListItem title="{av>name}" icon="sap-icon://employee" info="{av>info}" infoState="{av>infoState}"/>
+          </List>
+          <List headerText="{av>/absentHeader}" items="{av>/absent}" noDataText="{i18n>availability.nobodyOut}"
+            class="sapUiSmallMarginBeginOnly">
+            <StandardListItem title="{av>name}" description="{av>type}" icon="sap-icon://offsite-work"
+              info="{av>info}" infoState="{av>infoState}"/>
+          </List>
+        </l:Grid>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

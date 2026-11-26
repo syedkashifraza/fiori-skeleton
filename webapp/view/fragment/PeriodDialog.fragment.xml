@@ -1,0 +1,30 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.ui.layout.form">
+  <Dialog id="periodDialog" title="{pd>/title}" contentWidth="28rem">
+    <content>
+      <f:SimpleForm editable="true" layout="ColumnLayout" columnsM="1" columnsL="1" columnsXL="1">
+        <Label text="{i18n>team.name}" required="true"/>
+        <Input value="{pd>/name}" maxLength="100" valueState="{pd>/nameState}" valueLiveUpdate="true"/>
+
+        <Label text="{i18n>leave.period}" required="true" visible="{= ${pd>/mode} === 'critical' }"/>
+        <DateRangeSelection dateValue="{pd>/start}" secondDateValue="{pd>/end}" valueState="{pd>/dateState}"
+          visible="{= ${pd>/mode} === 'critical' }"/>
+        <Label text="{i18n>periods.reason}" visible="{= ${pd>/mode} === 'critical' }"/>
+        <TextArea value="{pd>/reason}" rows="2" maxLength="255" visible="{= ${pd>/mode} === 'critical' }"/>
+
+        <Label text="{i18n>periods.date}" required="true" visible="{= ${pd>/mode} === 'holiday' }"/>
+        <DatePicker dateValue="{pd>/start}" valueState="{pd>/dateState}" visible="{= ${pd>/mode} === 'holiday' }"/>
+        <Label text="{i18n>team.location}" visible="{= ${pd>/mode} === 'holiday' }"/>
+        <Input value="{pd>/location}" maxLength="10" visible="{= ${pd>/mode} === 'holiday' }"/>
+      </f:SimpleForm>
+    </content>
+    <beginButton>
+      <Button text="{i18n>common.save}" type="Emphasized" press=".onSavePeriod"/>
+    </beginButton>
+    <endButton>
+      <Button text="{i18n>common.cancel}" press=".onClosePeriodDialog"/>
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

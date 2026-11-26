@@ -1,0 +1,35 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.ui.layout.form">
+  <Dialog id="memberDialog" title="{mem>/title}" contentWidth="30rem">
+    <content>
+      <f:SimpleForm editable="true" layout="ColumnLayout" columnsM="1" columnsL="1" columnsXL="1">
+        <Label text="{i18n>team.name}" required="true"/>
+        <Input value="{mem>/displayName}" valueState="{mem>/nameState}" valueLiveUpdate="true"/>
+        <Label text="{i18n>team.email}" required="true"/>
+        <Input value="{mem>/userId}" type="Email" valueState="{mem>/emailState}" valueLiveUpdate="true"
+          placeholder="name@example.com"/>
+        <Label text="{i18n>team.role}"/>
+        <SegmentedButton selectedKey="{mem>/role}">
+          <items>
+            <SegmentedButtonItem key="Member" text="{i18n>team.roleMember}"/>
+            <SegmentedButtonItem key="Manager" text="{i18n>team.roleManager}"/>
+          </items>
+        </SegmentedButton>
+        <Label text="{i18n>team.location}"/>
+        <Input value="{mem>/location}" maxLength="10"/>
+        <Label text="{i18n>team.allowance}"/>
+        <StepInput value="{mem>/annualAllowance}" min="0" max="60" step="0.5" displayValuePrecision="1"/>
+        <Label text="{i18n>team.active}"/>
+        <Switch state="{mem>/active}"/>
+      </f:SimpleForm>
+    </content>
+    <beginButton>
+      <Button text="{i18n>common.save}" type="Emphasized" press=".onSaveMember"/>
+    </beginButton>
+    <endButton>
+      <Button text="{i18n>common.cancel}" press=".onCloseMemberDialog"/>
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

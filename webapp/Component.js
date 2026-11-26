@@ -7,7 +7,7 @@ sap.ui.define([
   "use strict";
 
   // Routes that only managers may open. Members are sent back to home.
-  var MANAGER_ROUTES = ["approvals", "team", "rules", "periods"];
+  var MANAGER_ROUTES = ["approvals", "approvalDetail", "team", "rules", "ruleDetail", "periods"];
 
   return UIComponent.extend("com.team.leavetracker.Component", {
     metadata: {

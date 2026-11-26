@@ -5,7 +5,9 @@
     "type": "application",
     "i18n": {
       "bundleName": "com.team.leavetracker.i18n.i18n",
-      "supportedLocales": [""],
+      "supportedLocales": [
+        ""
+      ],
       "fallbackLocale": ""
     },
     "title": "{{appTitle}}",
@@ -55,7 +57,9 @@
         "sap.ui.core": {},
         "sap.f": {},
         "sap.tnt": {},
-        "sap.ui.layout": {}
+        "sap.ui.layout": {},
+        "sap.ui.unified": {},
+        "sap.uxap": {}
       }
     },
     "contentDensities": {
@@ -67,7 +71,9 @@
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "com.team.leavetracker.i18n.i18n",
-          "supportedLocales": [""],
+          "supportedLocales": [
+            ""
+          ],
           "fallbackLocale": ""
         }
       },
@@ -108,24 +114,108 @@
         }
       },
       "routes": [
-        { "name": "home", "pattern": "", "target": "home" },
-        { "name": "calendar", "pattern": "calendar", "target": "calendar" },
-        { "name": "availability", "pattern": "availability/:date:", "target": "availability" },
-        { "name": "myLeaves", "pattern": "myLeaves", "target": "myLeaves" },
-        { "name": "approvals", "pattern": "approvals", "target": "approvals" },
-        { "name": "team", "pattern": "team", "target": "team" },
-        { "name": "rules", "pattern": "rules", "target": "rules" },
-        { "name": "periods", "pattern": "periods", "target": "periods" }
+        {
+          "name": "home",
+          "pattern": "",
+          "target": "home"
+        },
+        {
+          "name": "calendar",
+          "pattern": "calendar",
+          "target": "calendar"
+        },
+        {
+          "name": "availability",
+          "pattern": "availability/:date:",
+          "target": "availability"
+        },
+        {
+          "name": "myLeaves",
+          "pattern": "myLeaves",
+          "target": "myLeaves"
+        },
+        {
+          "name": "leaveDetail",
+          "pattern": "myLeaves/{id}",
+          "target": "leaveDetail"
+        },
+        {
+          "name": "approvals",
+          "pattern": "approvals",
+          "target": "approvals"
+        },
+        {
+          "name": "approvalDetail",
+          "pattern": "approvals/{id}",
+          "target": "approvals"
+        },
+        {
+          "name": "team",
+          "pattern": "team",
+          "target": "team"
+        },
+        {
+          "name": "rules",
+          "pattern": "rules",
+          "target": "rules"
+        },
+        {
+          "name": "ruleDetail",
+          "pattern": "rules/{id}",
+          "target": "rules"
+        },
+        {
+          "name": "periods",
+          "pattern": "periods",
+          "target": "periods"
+        }
       ],
       "targets": {
-        "home": { "id": "home", "name": "Home", "level": 1 },
-        "calendar": { "id": "calendar", "name": "Placeholder", "level": 1 },
-        "availability": { "id": "availability", "name": "Placeholder", "level": 1 },
-        "myLeaves": { "id": "myLeaves", "name": "Placeholder", "level": 1 },
-        "approvals": { "id": "approvals", "name": "Placeholder", "level": 1 },
-        "team": { "id": "team", "name": "Placeholder", "level": 1 },
-        "rules": { "id": "rules", "name": "Placeholder", "level": 1 },
-        "periods": { "id": "periods", "name": "Placeholder", "level": 1 }
+        "home": {
+          "id": "home",
+          "name": "Home",
+          "level": 1
+        },
+        "calendar": {
+          "id": "calendar",
+          "name": "Calendar",
+          "level": 1
+        },
+        "availability": {
+          "id": "availability",
+          "name": "Availability",
+          "level": 1
+        },
+        "myLeaves": {
+          "id": "myLeaves",
+          "name": "MyLeaves",
+          "level": 1
+        },
+        "leaveDetail": {
+          "id": "leaveDetail",
+          "name": "LeaveDetail",
+          "level": 2
+        },
+        "approvals": {
+          "id": "approvals",
+          "name": "Approvals",
+          "level": 1
+        },
+        "team": {
+          "id": "team",
+          "name": "Team",
+          "level": 1
+        },
+        "rules": {
+          "id": "rules",
+          "name": "Rules",
+          "level": 1
+        },
+        "periods": {
+          "id": "periods",
+          "name": "Periods",
+          "level": 1
+        }
       }
     }
   }

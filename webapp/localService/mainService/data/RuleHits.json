@@ -30,5 +30,29 @@
     "effect": "REQUIRE_APPROVAL",
     "date": "2027-01-21",
     "message": "Release 2027.1 is a critical period"
+  },
+  {
+    "ID": "1f000000-0000-4000-8000-000000000005",
+    "request_ID": "1e000000-0000-4000-8000-000000000012",
+    "rule_ID": "8e000000-0000-4000-8000-000000000007",
+    "effect": "REQUIRE_APPROVAL",
+    "date": null,
+    "message": "9 days in December is more than the 8 allowed per month"
+  },
+  {
+    "ID": "1f000000-0000-4000-8000-000000000006",
+    "request_ID": "1e000000-0000-4000-8000-000000000013",
+    "rule_ID": "8e000000-0000-4000-8000-000000000003",
+    "effect": "REQUIRE_APPROVAL",
+    "date": null,
+    "message": "11 working days is more than the 10 allowed without approval"
+  },
+  {
+    "ID": "1f000000-0000-4000-8000-000000000007",
+    "request_ID": "1e000000-0000-4000-8000-000000000013",
+    "rule_ID": "8e000000-0000-4000-8000-000000000007",
+    "effect": "REQUIRE_APPROVAL",
+    "date": null,
+    "message": "11 days in March is more than the 8 allowed per month"
   }
 ]

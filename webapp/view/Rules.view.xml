@@ -1,0 +1,130 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Rules"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:f="sap.f"
+  xmlns:form="sap.ui.layout.form"
+  xmlns="sap.m"
+  height="100%">
+  <f:FlexibleColumnLayout id="rulesLayout" layout="{rv>/layout}" backgroundDesign="Solid">
+    <f:beginColumnPages>
+      <Page id="rulesListPage" title="{i18n>rules.title}">
+        <content>
+          <List
+            id="rulesTable"
+            mode="SingleSelectMaster"
+            selectionChange=".onSelectRule"
+            noDataText="{i18n>rules.empty}"
+            items="{
+              path: '/Rules',
+              sorter: { path: 'ruleType' },
+              parameters: {
+                $count: true,
+                $$updateGroupId: 'ruleEdit',
+                $expand: 'subgroup($select=ID,name),criticalPeriod($select=ID,name)'
+              },
+              events: { dataReceived: '.onRulesReceived' }
+            }">
+            <headerToolbar>
+              <OverflowToolbar>
+                <Title text="{i18n>rules.title} ({rv>/count})" level="H2"/>
+                <ToolbarSpacer/>
+                <Button text="{i18n>rules.new}" icon="sap-icon://add" type="Emphasized" press=".onNewRule"
+                  enabled="{= !${rv>/editing} }"/>
+              </OverflowToolbar>
+            </headerToolbar>
+            <ObjectListItem
+              title="{path: 'ruleType', formatter: '.formatter.ruleTypeText'}"
+              type="Navigation">
+              <firstStatus>
+                <ObjectStatus text="{path: 'effect', formatter: '.formatter.effectText'}"
+                  state="{path: 'effect', formatter: '.formatter.effectState'}"/>
+              </firstStatus>
+              <secondStatus>
+                <ObjectStatus text="{= ${path: 'active', targetType: 'any'} ? ${i18n>rules.active} : ${i18n>rules.inactive} }"
+                  state="{= ${path: 'active', targetType: 'any'} ? 'Success' : 'None' }"/>
+              </secondStatus>
+              <ObjectAttribute text="{description}"/>
+              <ObjectAttribute title="{i18n>rules.scope}"
+                text="{= ${path: 'subgroup/name', targetType: 'any'} || ${path: 'criticalPeriod/name', targetType: 'any'} || ${i18n>rules.wholeTeam} }"/>
+            </ObjectListItem>
+          </List>
+        </content>
+      </Page>
+    </f:beginColumnPages>
+
+    <f:midColumnPages>
+      <Page id="ruleEditPage" title="{parts: ['rv>/isNew', {path: 'ruleType', targetType: 'any'}], formatter: '.editTitle'}"
+        busy="{rv>/busy}" showFooter="true">
+        <headerContent>
+          <Button icon="sap-icon://decline" tooltip="{i18n>common.close}" press=".onCancel"/>
+        </headerContent>
+        <content>
+          <form:SimpleForm editable="true" layout="ColumnLayout" columnsM="1" columnsL="1" columnsXL="1"
+            title="{i18n>rules.editor}">
+            <Label text="{i18n>rules.type}" required="true"/>
+            <Select selectedKey="{ruleType}" change=".onRuleTypeChange" width="100%"
+              items="{path: 'rv>/types', templateShareable: false}">
+              <core:Item key="{rv>key}" text="{rv>label}"/>
+            </Select>
+            <Label text=""/>
+            <Text text="{path: 'ruleType', formatter: '.ruleHint'}" class="sapUiTinyMarginBottom"/>
+
+            <Label text="{i18n>rules.description}"/>
+            <Input value="{description}" maxLength="255"/>
+
+            <Label text="{i18n>rules.effect}" required="true"/>
+            <SegmentedButton selectedKey="{effect}" items="{path: 'rv>/effects', templateShareable: false}">
+              <items>
+                <SegmentedButtonItem key="{rv>key}" text="{rv>label}"/>
+              </items>
+            </SegmentedButton>
+
+            <!-- Parameter fields: shown according to model/ruleTypes.js -->
+            <Label text="{path: 'ruleType', formatter: '.thresholdLabel'}" required="true"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'threshold'}], formatter: '.hasParam'}"/>
+            <StepInput value="{threshold}" min="0" max="365"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'threshold'}], formatter: '.hasParam'}"/>
+
+            <Label text="{i18n>rules.subgroup}"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'subgroup'}], formatter: '.hasParam'}"/>
+            <Select selectedKey="{= ${path: 'subgroup_ID', targetType: 'any'} || '' }" change=".onSubgroupChange" width="100%"
+              items="{path: 'rv>/subgroups', templateShareable: false}"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'subgroup'}], formatter: '.hasParam'}">
+              <core:Item key="{rv>key}" text="{rv>text}"/>
+            </Select>
+
+            <Label text="{i18n>rules.period}" required="true"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'period'}], formatter: '.hasParam'}"/>
+            <Select selectedKey="{period}" width="100%" items="{path: 'rv>/periods', templateShareable: false}"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'period'}], formatter: '.hasParam'}">
+              <core:Item key="{rv>key}" text="{rv>label}"/>
+            </Select>
+
+            <Label text="{i18n>rules.criticalPeriod}" required="true"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'criticalPeriod'}], formatter: '.hasParam'}"/>
+            <Select selectedKey="{criticalPeriod_ID}" width="100%" forceSelection="false"
+              items="{path: 'rv>/criticalPeriods', templateShareable: false}"
+              visible="{parts: [{path: 'ruleType', targetType: 'any'}, {value: 'criticalPeriod'}], formatter: '.hasParam'}">
+              <core:Item key="{rv>ID}" text="{rv>text}"/>
+            </Select>
+
+            <Label text="{i18n>rules.active}"/>
+            <Switch state="{active}"/>
+          </form:SimpleForm>
+
+          <MessageStrip text="{i18n>rules.engineLater}" type="Information" showIcon="true" class="sapUiSmallMargin"/>
+        </content>
+        <footer>
+          <OverflowToolbar>
+            <Button text="{i18n>common.delete}" type="Transparent" icon="sap-icon://delete" press=".onDelete"
+              visible="{= !${rv>/isNew} }"/>
+            <ToolbarSpacer/>
+            <Button text="{i18n>common.save}" type="Emphasized" press=".onSave"/>
+            <Button text="{i18n>common.cancel}" press=".onCancel"/>
+          </OverflowToolbar>
+        </footer>
+      </Page>
+    </f:midColumnPages>
+  </f:FlexibleColumnLayout>
+</mvc:View>

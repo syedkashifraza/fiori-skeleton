@@ -1,0 +1,112 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Periods"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:unified="sap.ui.unified"
+  xmlns:l="sap.ui.layout"
+  xmlns="sap.m">
+  <Page id="periodsPage" title="{i18n>periods.title}">
+    <content>
+      <l:Grid defaultSpan="XL4 L5 M12 S12" class="sapUiSmallMarginTop" hSpacing="1">
+        <!-- Overview calendar -->
+        <VBox>
+          <Title text="{i18n>periods.overview}" titleStyle="H5" class="sapUiTinyMarginBottom"/>
+          <unified:Calendar
+            id="periodsCalendar"
+            months="1"
+            width="100%"
+            showWeekNumbers="false"
+            specialDates="{path: 'pv>/specialDates', templateShareable: false}"
+            legend="periodsLegend">
+            <unified:specialDates>
+              <unified:DateTypeRange startDate="{pv>start}" endDate="{pv>end}" type="{pv>type}" tooltip="{pv>tooltip}"/>
+            </unified:specialDates>
+          </unified:Calendar>
+          <unified:CalendarLegend id="periodsLegend" standardItems="Today">
+            <unified:items>
+              <unified:CalendarLegendItem text="{i18n>calendar.legendHoliday}" type="NonWorking"/>
+              <unified:CalendarLegendItem text="{i18n>calendar.legendCritical}" type="Type06"/>
+            </unified:items>
+          </unified:CalendarLegend>
+        </VBox>
+
+        <VBox>
+          <layoutData><l:GridData span="XL8 L7 M12 S12"/></layoutData>
+
+          <!-- Critical periods -->
+          <Table
+            id="criticalTable"
+            noDataText="{i18n>periods.noCritical}"
+            items="{
+              path: '/CriticalPeriods',
+              sorter: { path: 'startDate' },
+              parameters: { $count: true },
+              events: { dataReceived: '.onDataReceived' }
+            }">
+            <headerToolbar>
+              <OverflowToolbar>
+                <Title text="{i18n>periods.critical}" level="H2"/>
+                <ToolbarSpacer/>
+                <Button text="{i18n>periods.addCritical}" icon="sap-icon://add" press=".onAddCritical"/>
+              </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+              <Column><Text text="{i18n>team.name}"/></Column>
+              <Column><Text text="{i18n>leave.period}"/></Column>
+              <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>periods.reason}"/></Column>
+              <Column width="3rem" hAlign="End"/>
+            </columns>
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <ObjectIdentifier title="{name}"/>
+                  <Text text="{parts: [{path: 'startDate', targetType: 'any'}, {path: 'endDate', targetType: 'any'}], formatter: '.formatter.dateRange'}"/>
+                  <Text text="{reason}"/>
+                  <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>common.delete}" press=".onDelete"/>
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
+
+          <!-- Public holidays -->
+          <Table
+            id="holidaysTable"
+            class="sapUiMediumMarginTop"
+            growing="true"
+            growingThreshold="15"
+            noDataText="{i18n>periods.noHolidays}"
+            items="{
+              path: '/Holidays',
+              sorter: { path: 'date' },
+              parameters: { $count: true },
+              events: { dataReceived: '.onDataReceived' }
+            }">
+            <headerToolbar>
+              <OverflowToolbar>
+                <Title text="{i18n>periods.holidays}" level="H2"/>
+                <ToolbarSpacer/>
+                <Button text="{i18n>periods.addHoliday}" icon="sap-icon://add" press=".onAddHoliday"/>
+              </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+              <Column width="12rem"><Text text="{i18n>periods.date}"/></Column>
+              <Column><Text text="{i18n>team.name}"/></Column>
+              <Column width="6rem"><Text text="{i18n>team.location}"/></Column>
+              <Column width="3rem" hAlign="End"/>
+            </columns>
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <ObjectIdentifier title="{path: 'date', targetType: 'any', formatter: '.formatter.shortDay'}"
+                    text="{path: 'date', targetType: 'any', formatter: '.formatter.dateRange'}"/>
+                  <Text text="{name}"/>
+                  <Text text="{location}"/>
+                  <Button icon="sap-icon://delete" type="Transparent" tooltip="{i18n>common.delete}" press=".onDelete"/>
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
+        </VBox>
+      </l:Grid>
+    </content>
+  </Page>
+</mvc:View>

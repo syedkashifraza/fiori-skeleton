@@ -1,0 +1,100 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Team"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page id="teamPage" title="{i18n>team.title}" busy="{team>/busy}">
+    <content>
+      <IconTabBar id="teamTabs" expandable="false" class="sapUiResponsiveContentPadding" stretchContentHeight="false">
+        <items>
+          <IconTabFilter key="members" text="{i18n>team.members}" icon="sap-icon://employee" count="{team>/memberCount}">
+            <Table
+              id="membersTable"
+              noDataText="{i18n>team.noMembers}"
+              items="{
+                path: '/Members',
+                sorter: { path: 'displayName' },
+                parameters: { $count: true, $expand: 'subgroups($expand=subgroup($select=ID,name))' },
+                events: { dataReceived: '.onMembersReceived' }
+              }">
+              <headerToolbar>
+                <OverflowToolbar>
+                  <SearchField width="16rem" liveChange=".onMemberSearch" placeholder="{i18n>team.searchMembers}"/>
+                  <ToolbarSpacer/>
+                  <Button text="{i18n>team.addMember}" icon="sap-icon://add-employee" type="Emphasized" press=".onAddMember"/>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column><Text text="{i18n>team.name}"/></Column>
+                <Column width="8rem"><Text text="{i18n>team.role}"/></Column>
+                <Column width="6rem" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>team.location}"/></Column>
+                <Column width="8rem" hAlign="End" minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>team.allowance}"/></Column>
+                <Column minScreenWidth="Desktop" demandPopin="true"><Text text="{i18n>team.subgroups}"/></Column>
+                <Column width="6rem"><Text text="{i18n>team.active}"/></Column>
+                <Column width="4rem" hAlign="End"/>
+              </columns>
+              <items>
+                <ColumnListItem>
+                  <cells>
+                    <ObjectIdentifier title="{displayName}" text="{userId}"/>
+                    <ObjectStatus text="{role}" state="{path: 'role', formatter: '.formatter.roleState'}"
+                      icon="{= ${path: 'role', targetType: 'any'} === 'Manager' ? 'sap-icon://manager' : '' }"/>
+                    <Text text="{location}"/>
+                    <ObjectNumber number="{annualAllowance}" unit="{i18n>leave.days}"/>
+                    <HBox wrap="Wrap" items="{path: 'subgroups', templateShareable: false}">
+                      <ObjectStatus text="{subgroup/name}" state="Information" inverted="true"
+                        class="sapUiTinyMarginEnd sapUiTinyMarginBottom"/>
+                    </HBox>
+                    <ObjectStatus text="{= ${path: 'active', targetType: 'any'} ? ${i18n>team.yes} : ${i18n>team.no} }"
+                      state="{= ${path: 'active', targetType: 'any'} ? 'Success' : 'None' }"/>
+                    <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>common.edit}" press=".onEditMember"/>
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </IconTabFilter>
+
+          <IconTabFilter key="subgroups" text="{i18n>team.subgroupsTab}" icon="sap-icon://group" count="{team>/subgroupCount}">
+            <Table
+              id="subgroupsTable"
+              noDataText="{i18n>team.noSubgroups}"
+              items="{
+                path: '/Subgroups',
+                sorter: { path: 'name' },
+                parameters: { $count: true, $expand: 'members($select=ID,member_ID;$expand=member($select=ID,displayName))' },
+                events: { dataReceived: '.onSubgroupsReceived' }
+              }">
+              <headerToolbar>
+                <OverflowToolbar>
+                  <Text text="{i18n>team.subgroupsHint}"/>
+                  <ToolbarSpacer/>
+                  <Button text="{i18n>team.addSubgroup}" icon="sap-icon://add" type="Emphasized" press=".onAddSubgroup"/>
+                </OverflowToolbar>
+              </headerToolbar>
+              <columns>
+                <Column width="12rem"><Text text="{i18n>team.name}"/></Column>
+                <Column minScreenWidth="Tablet" demandPopin="true"><Text text="{i18n>team.description}"/></Column>
+                <Column><Text text="{i18n>team.members}"/></Column>
+                <Column width="9rem" hAlign="End"><Text text="{i18n>team.minAvailable}"/></Column>
+                <Column width="4rem" hAlign="End"/>
+              </columns>
+              <items>
+                <ColumnListItem>
+                  <cells>
+                    <ObjectIdentifier title="{name}"/>
+                    <Text text="{description}"/>
+                    <HBox wrap="Wrap" items="{path: 'members', templateShareable: false}">
+                      <ObjectStatus text="{member/displayName}" inverted="true" state="None" icon="sap-icon://employee"
+                        class="sapUiTinyMarginEnd sapUiTinyMarginBottom"/>
+                    </HBox>
+                    <ObjectNumber number="{minAvailable}" unit="{i18n>team.people}"/>
+                    <Button icon="sap-icon://edit" type="Transparent" tooltip="{i18n>common.edit}" press=".onEditSubgroup"/>
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </IconTabFilter>
+        </items>
+      </IconTabBar>
+    </content>
+  </Page>
+</mvc:View>

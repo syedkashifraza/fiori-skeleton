@@ -1,0 +1,116 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Approvals"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:f="sap.f"
+  xmlns:form="sap.ui.layout.form"
+  xmlns="sap.m"
+  height="100%">
+  <f:FlexibleColumnLayout id="approvalsLayout" layout="{appr>/layout}" backgroundDesign="Solid">
+    <f:beginColumnPages>
+      <Page id="approvalsListPage" title="{i18n>approvals.title}">
+        <content>
+          <List
+            id="approvalsList"
+            mode="SingleSelectMaster"
+            selectionChange=".onSelect"
+            noDataText="{i18n>approvals.empty}"
+            items="{
+              path: '/LeaveRequests',
+              filters: [{ path: 'status', operator: 'EQ', value1: 'Submitted' }],
+              sorter: { path: 'startDate' },
+              parameters: { $count: true },
+              events: { dataReceived: '.onListReceived' }
+            }">
+            <headerToolbar>
+              <Toolbar>
+                <Title text="{i18n>approvals.pending} ({appr>/count})" level="H2"/>
+                <ToolbarSpacer/>
+                <Button icon="sap-icon://refresh" tooltip="{i18n>common.refresh}" press=".onRefresh"/>
+              </Toolbar>
+            </headerToolbar>
+            <ObjectListItem
+              title="{member/displayName}"
+              number="{workingDays}"
+              numberUnit="{i18n>leave.days}"
+              type="Navigation">
+              <firstStatus>
+                <ObjectStatus text="{type/name}" state="Information"/>
+              </firstStatus>
+              <ObjectAttribute text="{parts: [{path: 'startDate', targetType: 'any'}, {path: 'endDate', targetType: 'any'}], formatter: '.formatter.dateRange'}"/>
+              <ObjectAttribute text="{comment}"/>
+            </ObjectListItem>
+          </List>
+        </content>
+      </Page>
+    </f:beginColumnPages>
+
+    <f:midColumnPages>
+      <Page id="approvalDetailPage" title="{member/displayName}" busy="{appr>/busy}" showFooter="true">
+        <headerContent>
+          <Button icon="sap-icon://full-screen" tooltip="{i18n>common.fullScreen}" press=".onToggleFullScreen"
+            visible="{= ${appr>/layout} !== 'MidColumnFullScreen' }"/>
+          <Button icon="sap-icon://exit-full-screen" tooltip="{i18n>common.exitFullScreen}" press=".onToggleFullScreen"
+            visible="{= ${appr>/layout} === 'MidColumnFullScreen' }"/>
+          <Button icon="sap-icon://decline" tooltip="{i18n>common.close}" press=".onCloseDetail"/>
+        </headerContent>
+        <content>
+          <VBox class="sapUiSmallMargin">
+            <ObjectHeader
+              title="{type/name}"
+              number="{workingDays}"
+              numberUnit="{i18n>leave.days}"
+              responsive="true"
+              backgroundDesign="Transparent">
+              <statuses>
+                <ObjectStatus text="{path: 'status', formatter: '.formatter.statusText'}"
+                  state="{path: 'status', formatter: '.formatter.statusState'}"
+                  icon="{path: 'status', formatter: '.formatter.statusIcon'}"/>
+              </statuses>
+              <ObjectAttribute title="{i18n>leave.period}"
+                text="{parts: [{path: 'startDate', targetType: 'any'}, {path: 'endDate', targetType: 'any'}], formatter: '.formatter.dateRange'}"/>
+              <ObjectAttribute title="{i18n>request.halfDays}"
+                text="{parts: [{path: 'startHalfDay', targetType: 'any'}, {path: 'endHalfDay', targetType: 'any'}], formatter: '.formatter.halfDayInfo'}"
+                visible="{= ${path: 'startHalfDay', targetType: 'any'} === true || ${path: 'endHalfDay', targetType: 'any'} === true }"/>
+              <ObjectAttribute title="{i18n>leave.comment}" text="{comment}"
+                visible="{= !!${path: 'comment', targetType: 'any'} }"/>
+            </ObjectHeader>
+
+            <Title text="{i18n>approvals.ruleHits}" titleStyle="H5" class="sapUiSmallMarginTop"/>
+            <List items="{path: 'hits', templateShareable: false}" noDataText="{i18n>detail.noHits}">
+              <CustomListItem>
+                <HBox class="sapUiSmallMargin" alignItems="Center">
+                  <ObjectStatus text="{path: 'effect', formatter: '.formatter.effectText'}"
+                    state="{path: 'effect', formatter: '.formatter.effectState'}" inverted="true"
+                    class="sapUiSmallMarginEnd"/>
+                  <VBox>
+                    <Text text="{message}"/>
+                    <Text text="{path: 'date', targetType: 'any', formatter: '.formatter.dateRange'}" class="sapUiTinyMarginTop"/>
+                  </VBox>
+                </HBox>
+              </CustomListItem>
+            </List>
+
+            <Title text="{i18n>approvals.alsoOut}" titleStyle="H5" class="sapUiSmallMarginTop"/>
+            <List items="{appr>/overlaps}" noDataText="{i18n>approvals.nobodyElseOut}">
+              <StandardListItem title="{appr>name}" description="{appr>period}" info="{appr>info}"
+                infoState="{appr>infoState}" icon="sap-icon://employee"/>
+            </List>
+
+            <Title text="{i18n>approvals.coverage}" titleStyle="H5" class="sapUiSmallMarginTop"/>
+            <List items="{appr>/coverage}">
+              <StandardListItem title="{appr>name}" description="{appr>text}" info="{appr>stateText}"
+                infoState="{appr>state}" icon="sap-icon://group"/>
+            </List>
+          </VBox>
+        </content>
+        <footer>
+          <OverflowToolbar>
+            <ToolbarSpacer/>
+            <Button text="{i18n>approvals.approve}" type="Accept" icon="sap-icon://accept" press=".onApprove"/>
+            <Button text="{i18n>approvals.reject}" type="Reject" icon="sap-icon://decline" press=".onReject"/>
+          </OverflowToolbar>
+        </footer>
+      </Page>
+    </f:midColumnPages>
+  </f:FlexibleColumnLayout>
+</mvc:View>

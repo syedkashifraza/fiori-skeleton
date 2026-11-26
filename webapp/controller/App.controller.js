@@ -3,6 +3,13 @@ sap.ui.define([
 ], function (BaseController) {
   "use strict";
 
+  // Detail routes highlight their parent entry in the side navigation
+  var NAV_KEY = {
+    leaveDetail: "myLeaves",
+    approvalDetail: "approvals",
+    ruleDetail: "rules"
+  };
+
   return BaseController.extend("com.team.leavetracker.controller.App", {
     onInit: function () {
       this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
@@ -14,7 +21,7 @@ sap.ui.define([
     },
 
     _onRouteMatched: function (sChannel, sEvent, oData) {
-      this.byId("sideNav").setSelectedKey(oData.name);
+      this.byId("sideNav").setSelectedKey(NAV_KEY[oData.name] || oData.name);
     },
 
     onNavItemSelect: function (oEvent) {

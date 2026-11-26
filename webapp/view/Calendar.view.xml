@@ -1,0 +1,77 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.Calendar"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:unified="sap.ui.unified"
+  xmlns="sap.m">
+  <Page id="calendarPage" title="{i18n>calendar.title}">
+    <content>
+      <VBox class="sapUiSmallMargin">
+        <PlanningCalendar
+          id="planningCalendar"
+          startDate="{cal>/startDate}"
+          builtInViews="Day,Week,One Month,Month"
+          viewKey="Day"
+          rows="{cal>/rows}"
+          specialDates="{path: 'cal>/specialDates', templateShareable: false}"
+          appointmentsVisualization="Filled"
+          showEmptyIntervalHeaders="false"
+          showWeekNumbers="true"
+          stickyHeader="true"
+          busy="{cal>/busy}"
+          legend="calendarLegend"
+          appointmentSelect=".onAppointmentSelect">
+          <toolbarContent>
+            <Title text="{cal>/title}" titleStyle="H4"/>
+            <ToolbarSpacer/>
+            <Label text="{i18n>calendar.subgroup}" labelFor="subgroupSelect"/>
+            <Select id="subgroupSelect" selectedKey="{cal>/subgroup}" change=".onSubgroupChange"
+              items="{path: 'cal>/subgroups', templateShareable: false}">
+              <core:Item key="{cal>key}" text="{cal>text}"/>
+            </Select>
+            <Button icon="sap-icon://legend" tooltip="{i18n>calendar.showLegend}" press=".onToggleLegend"/>
+          </toolbarContent>
+          <specialDates>
+            <unified:DateTypeRange startDate="{cal>start}" endDate="{cal>end}" type="{cal>type}" tooltip="{cal>tooltip}"/>
+          </specialDates>
+          <rows>
+            <PlanningCalendarRow
+              title="{cal>name}"
+              text="{cal>subtitle}"
+              icon="sap-icon://employee"
+              appointments="{path: 'cal>appointments', templateShareable: false}">
+              <appointments>
+                <unified:CalendarAppointment
+                  startDate="{cal>start}"
+                  endDate="{cal>end}"
+                  title="{cal>title}"
+                  text="{cal>text}"
+                  icon="{cal>icon}"
+                  color="{cal>color}"
+                  tentative="{cal>pending}"
+                  key="{cal>id}"/>
+              </appointments>
+            </PlanningCalendarRow>
+          </rows>
+        </PlanningCalendar>
+
+        <PlanningCalendarLegend
+          id="calendarLegend"
+          visible="{cal>/showLegend}"
+          standardItems="Today,NonWorkingDay"
+          items="{path: 'cal>/legendDays', templateShareable: false}"
+          appointmentItems="{path: 'cal>/legendTypes', templateShareable: false}"
+          appointmentItemsHeader="{i18n>calendar.legendTypes}"
+          itemsHeader="{i18n>calendar.legendDays}"
+          class="sapUiSmallMarginTop">
+          <items>
+            <unified:CalendarLegendItem text="{cal>text}" type="{cal>type}"/>
+          </items>
+          <appointmentItems>
+            <unified:CalendarLegendItem text="{cal>text}" color="{cal>color}"/>
+          </appointmentItems>
+        </PlanningCalendarLegend>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

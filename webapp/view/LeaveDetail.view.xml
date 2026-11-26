@@ -1,0 +1,119 @@
+<mvc:View
+  controllerName="com.team.leavetracker.controller.LeaveDetail"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:uxap="sap.uxap"
+  xmlns:f="sap.ui.layout.form"
+  xmlns="sap.m">
+  <uxap:ObjectPageLayout id="leaveDetailPage" showFooter="false" upperCaseAnchorBar="false" busy="{detail>/busy}">
+    <uxap:headerTitle>
+      <uxap:ObjectPageDynamicHeaderTitle>
+        <uxap:breadcrumbs>
+          <Breadcrumbs>
+            <Link text="{i18n>myLeaves.title}" press=".onNavBack"/>
+          </Breadcrumbs>
+        </uxap:breadcrumbs>
+        <uxap:expandedHeading>
+          <Title text="{type/name}" wrapping="true"/>
+        </uxap:expandedHeading>
+        <uxap:snappedHeading>
+          <Title text="{type/name} · {parts: [{path: 'startDate', targetType: 'any'}, {path: 'endDate', targetType: 'any'}], formatter: '.formatter.dateRange'}"/>
+        </uxap:snappedHeading>
+        <uxap:expandedContent>
+          <Text text="{member/displayName}"/>
+        </uxap:expandedContent>
+        <uxap:actions>
+          <Button text="{i18n>detail.submit}" type="Emphasized" press=".onSubmit"
+            visible="{= ${path: 'status', targetType: 'any'} === 'Draft' &amp;&amp; ${path: 'member_ID', targetType: 'any'} === ${user>/memberId} }"/>
+          <Button text="{i18n>detail.cancelRequest}" press=".onCancelRequest"
+            visible="{= (${path: 'status', targetType: 'any'} === 'Draft' || ${path: 'status', targetType: 'any'} === 'Submitted' || ${path: 'status', targetType: 'any'} === 'Approved') &amp;&amp; ${path: 'member_ID', targetType: 'any'} === ${user>/memberId} }"/>
+        </uxap:actions>
+      </uxap:ObjectPageDynamicHeaderTitle>
+    </uxap:headerTitle>
+
+    <uxap:headerContent>
+      <HBox wrap="Wrap">
+        <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+          <Label text="{i18n>leave.status}"/>
+          <ObjectStatus
+            text="{path: 'status', formatter: '.formatter.statusText'}"
+            state="{path: 'status', formatter: '.formatter.statusState'}"
+            icon="{path: 'status', formatter: '.formatter.statusIcon'}"
+            class="sapMObjectStatusLarge"/>
+        </VBox>
+        <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+          <Label text="{i18n>leave.period}"/>
+          <Text text="{parts: [{path: 'startDate', targetType: 'any'}, {path: 'endDate', targetType: 'any'}], formatter: '.formatter.dateRange'}"/>
+        </VBox>
+        <VBox class="sapUiMediumMarginEnd sapUiSmallMarginBottom">
+          <Label text="{i18n>leave.workingDays}"/>
+          <ObjectNumber number="{workingDays}" unit="{i18n>leave.days}" class="sapMObjectNumberLarge"/>
+        </VBox>
+      </HBox>
+    </uxap:headerContent>
+
+    <uxap:sections>
+      <uxap:ObjectPageSection title="{i18n>detail.sectionDetails}">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <f:SimpleForm layout="ColumnLayout" columnsM="2" columnsL="2" columnsXL="2" editable="false">
+              <Label text="{i18n>leave.type}"/>
+              <Text text="{type/name}"/>
+              <Label text="{i18n>detail.from}"/>
+              <Text text="{path: 'startDate', targetType: 'any', formatter: '.formatter.dateRange'}"/>
+              <Label text="{i18n>detail.to}"/>
+              <Text text="{path: 'endDate', targetType: 'any', formatter: '.formatter.dateRange'}"/>
+              <Label text="{i18n>request.halfDays}"/>
+              <Text text="{parts: [{path: 'startHalfDay', targetType: 'any'}, {path: 'endHalfDay', targetType: 'any'}], formatter: '.halfDayText'}"/>
+              <Label text="{i18n>leave.comment}"/>
+              <Text text="{= ${path: 'comment', targetType: 'any'} || '–' }"/>
+              <Label text="{i18n>detail.createdAt}"/>
+              <Text text="{createdAt}"/>
+            </f:SimpleForm>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+
+      <uxap:ObjectPageSection title="{i18n>detail.sectionDecision}">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <VBox>
+              <MessageStrip text="{i18n>detail.noDecision}" visible="{= !${path: 'decidedBy', targetType: 'any'} }" type="Information" showIcon="true"/>
+              <f:SimpleForm layout="ColumnLayout" columnsM="2" columnsL="2" columnsXL="2" editable="false" visible="{= !!${path: 'decidedBy', targetType: 'any'} }">
+                <Label text="{i18n>detail.decidedBy}"/>
+                <Text text="{decidedBy}"/>
+                <Label text="{i18n>detail.decidedAt}"/>
+                <Text text="{decidedAt}"/>
+                <Label text="{i18n>detail.decisionNote}"/>
+                <Text text="{= ${path: 'decisionNote', targetType: 'any'} || '–' }"/>
+              </f:SimpleForm>
+            </VBox>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+
+      <uxap:ObjectPageSection title="{i18n>detail.sectionRules}">
+        <uxap:subSections>
+          <uxap:ObjectPageSubSection>
+            <Table items="{path: 'hits', templateShareable: false}" noDataText="{i18n>detail.noHits}">
+              <columns>
+                <Column width="10rem"><Text text="{i18n>rules.effect}"/></Column>
+                <Column width="10rem"><Text text="{i18n>detail.hitDate}"/></Column>
+                <Column><Text text="{i18n>detail.hitMessage}"/></Column>
+              </columns>
+              <items>
+                <ColumnListItem>
+                  <cells>
+                    <ObjectStatus text="{path: 'effect', formatter: '.formatter.effectText'}"
+                      state="{path: 'effect', formatter: '.formatter.effectState'}"/>
+                    <Text text="{path: 'date', targetType: 'any', formatter: '.formatter.dateRange'}"/>
+                    <Text text="{message}"/>
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+          </uxap:ObjectPageSubSection>
+        </uxap:subSections>
+      </uxap:ObjectPageSection>
+    </uxap:sections>
+  </uxap:ObjectPageLayout>
+</mvc:View>
